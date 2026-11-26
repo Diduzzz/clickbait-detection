@@ -155,3 +155,21 @@ for classe, nome in [(1, "CLICKBAIT"), (0, "NON CLICKBAIT")]:
   print((parole.value_counts().head(10) / len(df[df["clickbait"] == classe]) * 100).round(2).astype(str)) # conta quante volte le parole appaiono e prende solo le prime 10 e le divide per il numero totale di titoli
 
 ## SPLIT TRAIN E TEST (80/20)
+X = df[["headline"] + feature_cols]
+y = df["clickbait"].values
+
+X_train_df, X_test_df, y_train, y_test = train_test_split(
+    X, y, test_size=0.20, random_state=42, stratify=y
+)
+
+# salvataggio dei dataset
+joblib.dump(
+    {
+        "X_train_df": X_train_df,
+        "X_test_df": X_test_df,
+        "y_train": y_train,
+        "y_test": y_test,
+        "feature_cols": feature_cols,
+    },
+    "data/dataset_split.joblib",
+)
